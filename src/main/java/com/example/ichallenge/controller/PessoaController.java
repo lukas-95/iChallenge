@@ -2,9 +2,6 @@ package com.example.ichallenge.controller;
 
 import com.example.ichallenge.model.Pessoa;
 import com.example.ichallenge.service.PessoaService;
-import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,32 +12,29 @@ import java.util.List;
 @RestController
 @RequestMapping("/pessoas")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class PessoaController {
+public class PessoaController implements IPessoaController{
 
     @Autowired
     private PessoaService pessoaService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PessoaController.class);
 
-
-    @GetMapping("/all")
     public ResponseEntity <List<Pessoa>> getAll() {
         return ResponseEntity.ok(pessoaService.getAllPessoas());
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity <Pessoa> getById( @PathVariable Long id) {
+    public ResponseEntity <Pessoa> getById(Long id) {
 
         return ResponseEntity.ok(pessoaService.getPessoa(id));
     }
 
-    @PostMapping("/cadastrar")
-    public ResponseEntity <Pessoa> cadastrarPessoa(@Valid @RequestBody Pessoa pessoa) {
+
+    public ResponseEntity <Pessoa> cadastrarPessoa(Pessoa pessoa) {
 
         return ResponseEntity.ok(pessoaService.savePessoa(pessoa));
     }
-//
+
+////TODO - Criar um método para atualizar apenas um campo de uma pessoa, aplicando SOLID
 //    @PatchMapping("/{id}")
 //    public ResponseEntity<Pessoa> updatePessoaField(
 //            @PathVariable Long id,
@@ -89,7 +83,7 @@ public class PessoaController {
 //
 //        return ResponseEntity.ok(pessoa);
 //    }
-
+//////////////////////////
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
     public void deletePessoa(@PathVariable Long id) {
