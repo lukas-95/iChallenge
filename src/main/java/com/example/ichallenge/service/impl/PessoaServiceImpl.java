@@ -1,7 +1,8 @@
-package com.example.ichallenge.service;
+package com.example.ichallenge.service.impl;
 
-import com.example.ichallenge.entities.Pessoa;
+import com.example.ichallenge.entity.Pessoa;
 import com.example.ichallenge.repository.PessoaRepository;
+import com.example.ichallenge.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +38,6 @@ public class PessoaServiceImpl implements PessoaService
                 .body(pessoaRepository.save(pessoa)).getBody();
     }
 
-    @Override
-    public Pessoa updatePessoa(Pessoa pessoa) {
-        return null;
-    }
 
     @Override
     @Transactional

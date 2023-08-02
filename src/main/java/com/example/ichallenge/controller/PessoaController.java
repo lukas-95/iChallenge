@@ -1,9 +1,11 @@
 package com.example.ichallenge.controller;
 
-import com.example.ichallenge.model.Pessoa;
+import com.example.ichallenge.dto.PessoaDTO;
+import com.example.ichallenge.dto.PessoaPatchDTO;
+import com.example.ichallenge.entity.Pessoa;
+import com.example.ichallenge.service.PessoaPatchService;
 import com.example.ichallenge.service.PessoaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,11 @@ public class PessoaController implements IPessoaController{
 
     @Autowired
     private PessoaService pessoaService;
+    @Autowired
+    private PessoaPatchService pessoaPatchService;
 
 
-    public ResponseEntity <List<Pessoa>> getAll() {
+    public ResponseEntity<List<Pessoa>> getAll() {
         return ResponseEntity.ok(pessoaService.getAllPessoas());
     }
 
@@ -29,65 +33,28 @@ public class PessoaController implements IPessoaController{
     }
 
 
-    public ResponseEntity <Pessoa> cadastrarPessoa(Pessoa pessoa) {
+    public ResponseEntity <Pessoa> cadastrarPessoa(PessoaDTO pessoaDTO) {
 
-        return ResponseEntity.ok(pessoaService.savePessoa(pessoa));
+        Pessoa pessoa = new Pessoa();
+        pessoa.setNome(pessoaDTO.getNome());
+        pessoa.setSobreNome(pessoaDTO.getSobreNome());
+        pessoa.setIdade(pessoaDTO.getIdade());
+        pessoa.setPais(pessoaDTO.getPais());
+
+        Pessoa pessoaCadastrada = pessoaService.savePessoa(pessoa);
+        return ResponseEntity.ok(pessoaCadastrada);
     }
 
-////TODO - Criar um método para atualizar apenas um campo de uma pessoa, aplicando SOLID
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<Pessoa> updatePessoaField(
-//            @PathVariable Long id,
-//            @RequestBody Map<String, Object> updates) {
-//
-//        Optional<Pessoa> optionalPessoa = pessoaRepository.findById(id);
-//        if (optionalPessoa.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        Pessoa pessoa = optionalPessoa.get();
-//
-//        // Update only the specified fields in the updates map
-//        if (updates.containsKey("nome")) {
-//            String nome = (String) updates.get("nome");
-//            if (nome != null && nome.length() >= 2 && nome.length() <= 30) {
-//                pessoa.setNome(nome);
-//            } else {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
-//        if (updates.containsKey("sobreNome")) {
-//            String sobreNome = (String) updates.get("sobreNome");
-//            if (sobreNome != null && sobreNome.length() >= 2 && sobreNome.length() <= 30) {
-//                pessoa.setSobreNome(sobreNome);
-//            } else {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
-//        if (updates.containsKey("idade")) {
-//            Integer idade = (Integer) updates.get("idade");
-//            if (idade != null && idade >= 0 && idade <= 999) {
-//                pessoa.setIdade(idade);
-//            } else {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
-//        if (updates.containsKey("pais")) {
-//            String pais = (String) updates.get("pais");
-//            if (pais != null && pais.length() >= 2 && pais.length() <= 30) {
-//                pessoa.setPais(pais);
-//            } else {
-//                return ResponseEntity.badRequest().build();
-//            }
-//        }
-//
-//        return ResponseEntity.ok(pessoa);
-//    }
-//////////////////////////
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{id}")
-    public void deletePessoa(@PathVariable Long id) {
+    public ResponseEntity<Pessoa> updatePessoaField(@PathVariable Long id, @RequestBody PessoaPatchDTO pessoaPatchDTO) {
+        Pessoa pessoaAtualizada = pessoaPatchService.updatePessoa(id, pessoaPatchDTO);
+        if (pessoaAtualizada != null) {
+            return ResponseEntity.ok(pessoaAtualizada);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
+    public void deletePessoa(@PathVariable Long id) {
         pessoaService.deletePessoa(id);
     }
 

@@ -1,27 +1,32 @@
 package com.example.ichallenge.controller;
 
-import com.example.ichallenge.model.Pessoa;
+import com.example.ichallenge.dto.PessoaDTO;
+import com.example.ichallenge.dto.PessoaPatchDTO;
+import com.example.ichallenge.entity.Pessoa;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 public interface IPessoaController {
 
     @GetMapping("/all")
-     ResponseEntity<List<Pessoa>> getAll();
+    ResponseEntity<List<Pessoa>> getAll();
 
     @GetMapping("/{id}")
-     ResponseEntity <Pessoa> getById(@PathVariable Long id);
+    ResponseEntity <Pessoa> getById(@PathVariable Long id);
 
     @PostMapping("/cadastrar")
-     ResponseEntity <Pessoa> cadastrarPessoa(@Valid @RequestBody Pessoa pessoa);
+    ResponseEntity <Pessoa> cadastrarPessoa(@Valid @RequestBody PessoaDTO pessoaDTO);
 
+    @PatchMapping("/{id}")
+    ResponseEntity<Pessoa> updatePessoaField(@PathVariable Long id, @RequestBody PessoaPatchDTO pessoaPatchDTO);
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{id}")
+    void deletePessoa(@PathVariable Long id);
 
 
 

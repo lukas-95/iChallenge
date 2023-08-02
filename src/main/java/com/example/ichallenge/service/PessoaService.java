@@ -1,6 +1,6 @@
 package com.example.ichallenge.service;
 
-import com.example.ichallenge.model.Pessoa;
+import com.example.ichallenge.entity.Pessoa;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface PessoaService {
 
     Pessoa savePessoa(Pessoa pessoa);
 
-    Pessoa updatePessoa(Pessoa pessoa);
+
 
     void deletePessoa(Long id);
 

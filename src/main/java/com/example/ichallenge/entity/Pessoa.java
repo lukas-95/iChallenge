@@ -1,4 +1,4 @@
-package com.example.ichallenge.entities;
+package com.example.ichallenge.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
