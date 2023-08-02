@@ -12,8 +12,12 @@ import java.util.Optional;
 
 @Service
 public class PessoaPatchServiceImpl implements PessoaPatchService {
+    private final PessoaRepository pessoaRepository;
+
     @Autowired
-    private PessoaRepository pessoaRepository;
+    public PessoaPatchServiceImpl(PessoaRepository pessoaRepository) {
+        this.pessoaRepository = pessoaRepository;
+    }
 
     @Override
     public Pessoa updatePessoa(Long id, PessoaPatchDTO pessoaPatchDTO) {
@@ -24,21 +28,45 @@ public class PessoaPatchServiceImpl implements PessoaPatchService {
 
         Pessoa pessoa = optionalPessoa.get();
 
-        if (pessoaPatchDTO.getNome() != null && pessoaPatchDTO.getNome().length() >= 2 && pessoaPatchDTO.getNome().length() <= 30) {
-            pessoa.setNome(pessoaPatchDTO.getNome());
+        if (pessoaPatchDTO.getNome() != null) {
+            updateNome(pessoa, pessoaPatchDTO.getNome());
         }
 
-        if (pessoaPatchDTO.getIdade() != null && pessoaPatchDTO.getIdade() >= 0 && pessoaPatchDTO.getIdade() <= 999) {
-            pessoa.setIdade(pessoaPatchDTO.getIdade());
+        if (pessoaPatchDTO.getIdade() != null) {
+            updateIdade(pessoa, pessoaPatchDTO.getIdade());
         }
 
-        if (pessoaPatchDTO.getPais() != null && pessoaPatchDTO.getPais().length() >= 2 && pessoaPatchDTO.getPais().length() <= 30) {
-            pessoa.setPais(pessoaPatchDTO.getPais());
+        if (pessoaPatchDTO.getPais() != null) {
+            updatePais(pessoa, pessoaPatchDTO.getPais());
         }
 
         pessoaRepository.save(pessoa);
 
         return pessoa;
+    }
+
+    private void updateNome(Pessoa pessoa, String nome) {
+        if (nome.length() >= 2 && nome.length() <= 30) {
+            pessoa.setNome(nome);
+        } else {
+            throw new IllegalArgumentException("Nome inválido");
+        }
+    }
+
+    private void updateIdade(Pessoa pessoa, Integer idade) {
+        if (idade >= 0 && idade <= 999) {
+            pessoa.setIdade(idade);
+        } else {
+            throw new IllegalArgumentException("Idade inválida");
+        }
+    }
+
+    private void updatePais(Pessoa pessoa, String pais) {
+        if (pais.length() >= 2 && pais.length() <= 30) {
+            pessoa.setPais(pais);
+        } else {
+            throw new IllegalArgumentException("País inválido");
+        }
     }
 
 }
