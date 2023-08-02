@@ -1,6 +1,6 @@
 package com.example.ichallenge.service;
 
-import com.example.ichallenge.model.Pessoa;
+import com.example.ichallenge.entities.Pessoa;
 import com.example.ichallenge.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
