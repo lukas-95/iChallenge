@@ -2,13 +2,15 @@ package com.iChallenge.person.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
-@Table(name = "tb_pessoas")
+@Table(name = "pessoas")
 public class Pessoa {
 
     @Id
