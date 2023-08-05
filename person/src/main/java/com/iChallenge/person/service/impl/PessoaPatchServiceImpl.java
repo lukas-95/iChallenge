@@ -5,6 +5,7 @@ import com.iChallenge.person.entity.Pessoa;
 import com.iChallenge.person.repository.PessoaRepository;
 import com.iChallenge.person.response.NotifyCheckResponse;
 import com.iChallenge.person.service.PessoaPatchService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class PessoaPatchServiceImpl implements PessoaPatchService {
 
@@ -29,15 +31,14 @@ public class PessoaPatchServiceImpl implements PessoaPatchService {
     public Pessoa updatePessoa(Long id, PessoaPatchDTO pessoaPatchDTO) {
         Optional<Pessoa> optionalPessoa = pessoaRepository.findById(id);
 
+
+        log.info("Atualizando Pessoa ID: {} Com Nome: {}", id, pessoaPatchDTO.getNome());
+
         if (!isApproved(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        if (optionalPessoa.isEmpty()) {
-            return null;
-        }
-
-        Pessoa pessoa = optionalPessoa.get();
+       Pessoa pessoa = optionalPessoa.get();
 
         if (pessoaPatchDTO.getNome() != null) {
             updateNome(pessoa, pessoaPatchDTO.getNome());

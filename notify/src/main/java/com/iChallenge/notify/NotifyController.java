@@ -20,9 +20,8 @@ public class NotifyController {
 
         boolean isApproved = notifyCheckService.
                 isApprovedPerson(personId);
-        log.info("Person with id {} is approved: {}", personId,isApproved);
 
         return new NotifyCheckResponse(isApproved);
     }
-    //todo implementar lógica para verificar se o usuário está aprovado de acordo com o sender
+
 }

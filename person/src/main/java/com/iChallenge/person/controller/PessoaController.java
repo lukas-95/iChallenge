@@ -46,6 +46,7 @@ public class PessoaController implements IPessoaController {
     }
 
     public ResponseEntity<Pessoa> updatePessoaField(@PathVariable Long id, @RequestBody PessoaPatchDTO pessoaPatchDTO) {
+
         Pessoa pessoaAtualizada = pessoaPatchService.updatePessoa(id, pessoaPatchDTO);
         if (pessoaAtualizada != null) {
             return ResponseEntity.ok(pessoaAtualizada);
@@ -55,6 +56,7 @@ public class PessoaController implements IPessoaController {
     }
 
     public void deletePessoa(@PathVariable Long id) {
+
         pessoaService.deletePessoa(id);
     }
 

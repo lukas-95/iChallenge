@@ -29,9 +29,9 @@ public class PessoaServiceImpl implements PessoaService {
     @Override
     public Pessoa getPessoa(Long id) {
         return pessoaRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build()).getBody();
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrada com o ID: " + id));
     }
+
 
     @Override
     public List<Pessoa> getAllPessoas() {
@@ -40,9 +40,8 @@ public class PessoaServiceImpl implements PessoaService {
 
     @Override
     public Pessoa savePessoa(Pessoa pessoa) {
-        log.info("Salvando pessoa {}", pessoa);
         pessoaRepository.saveAndFlush(pessoa);
-
+        log.info("Salvando pessoa {} com ID {}", pessoa.getNome(), pessoa.getId());
         NotifyCheckResponse notifyCheckResponse = restTemplate.getForObject(
                 "http://localhost:8081/notifyCheck/{personId}",
                 NotifyCheckResponse.class,
@@ -55,17 +54,21 @@ public class PessoaServiceImpl implements PessoaService {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(pessoaRepository.save(pessoa)).getBody();
+
         }
+
         else {
             pessoaRepository.delete(pessoa);
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
+
     }
 
 
     @Override
     public void deletePessoa(Long id) {
-        log.info("Deletando pessoa {}", id);
+
+        log.info("Deletando Pessoa com ID: {}", id);
 
         NotifyCheckResponse notifyCheckResponse = restTemplate.getForObject(
                 "http://localhost:8081/notifyCheck/{personId}",
@@ -74,6 +77,8 @@ public class PessoaServiceImpl implements PessoaService {
         );
 
         Optional<Pessoa> pessoa = pessoaRepository.findById(id);
+
+
 
         if (pessoa.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);

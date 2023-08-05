@@ -21,6 +21,7 @@ public interface IPessoaController {
     @PostMapping("/cadastrar")
     ResponseEntity <Pessoa> cadastrarPessoa(@Valid @RequestBody PessoaDTO pessoaDTO);
 
+
     @PatchMapping("/{id}")
     ResponseEntity<Pessoa> updatePessoaField(@PathVariable Long id, @RequestBody PessoaPatchDTO pessoaPatchDTO);
 
