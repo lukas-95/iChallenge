@@ -3,9 +3,13 @@ package com.iChallenge.person.service.impl;
 import com.iChallenge.person.dto.PessoaPatchDTO;
 import com.iChallenge.person.entity.Pessoa;
 import com.iChallenge.person.repository.PessoaRepository;
+import com.iChallenge.person.response.NotifyCheckResponse;
 import com.iChallenge.person.service.PessoaPatchService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -13,15 +17,22 @@ import java.util.Optional;
 public class PessoaPatchServiceImpl implements PessoaPatchService {
 
     private final PessoaRepository pessoaRepository;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public PessoaPatchServiceImpl(PessoaRepository pessoaRepository) {
+    public PessoaPatchServiceImpl(PessoaRepository pessoaRepository, RestTemplate restTemplate) {
         this.pessoaRepository = pessoaRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
     public Pessoa updatePessoa(Long id, PessoaPatchDTO pessoaPatchDTO) {
         Optional<Pessoa> optionalPessoa = pessoaRepository.findById(id);
+
+        if (!isApproved(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
+
         if (optionalPessoa.isEmpty()) {
             return null;
         }
@@ -67,5 +78,19 @@ public class PessoaPatchServiceImpl implements PessoaPatchService {
         } else {
             throw new IllegalArgumentException("País inválido");
         }
+    }
+
+    private boolean isApproved(Long personId) {
+        NotifyCheckResponse notifyCheckResponse = restTemplate.getForObject(
+                "http://localhost:8081/notifyCheck/{personId}",
+                NotifyCheckResponse.class,
+                personId
+        );
+
+        if (notifyCheckResponse != null) {
+            return notifyCheckResponse.isApproved();
+        }
+
+        return false;
     }
 }

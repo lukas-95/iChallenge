@@ -51,13 +51,15 @@ public class PessoaServiceImpl implements PessoaService {
         );
 
         assert notifyCheckResponse != null;
-        if (notifyCheckResponse.isApproved()){
+        if (notifyCheckResponse.isApproved().equals(true)){
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(pessoaRepository.save(pessoa)).getBody();
         }
-        else
+        else {
+            pessoaRepository.delete(pessoa);
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
 
@@ -65,10 +67,23 @@ public class PessoaServiceImpl implements PessoaService {
     public void deletePessoa(Long id) {
         log.info("Deletando pessoa {}", id);
 
+        NotifyCheckResponse notifyCheckResponse = restTemplate.getForObject(
+                "http://localhost:8081/notifyCheck/{personId}",
+                NotifyCheckResponse.class,
+                id
+        );
+
         Optional<Pessoa> pessoa = pessoaRepository.findById(id);
 
-        if (pessoa.isEmpty())
+        if (pessoa.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        assert notifyCheckResponse != null;
+        if (!notifyCheckResponse.isApproved()) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
+
         pessoaRepository.deleteById(id);
     }
 }
