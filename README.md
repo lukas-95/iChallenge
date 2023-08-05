@@ -56,7 +56,7 @@ Com as bases de dados criadas, você pode executar os microserviços `person` e 
 cd person
 mvn spring-boot:run
 ```
-***Atenção*** Agora você deve abrir um novo prompt de comando e navegar até a pasta *iChalenge* e colar o código abaixo
+***Atenção*** Agora você deve abrir um **novo prompt** de comando e navegar até a pasta *iChallenge* e colar o código abaixo
 
 **Microserviço Notify:**
 
