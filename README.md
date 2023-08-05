@@ -2,7 +2,8 @@
 
 ## Tutorial para Executar o Projeto iChallenge
 
-Este tutorial irá guiá-lo através dos passos necessários para executar o projeto iChallenge em sua máquina local. O iChallenge é um sistema composto por três microserviços: `iChallenge`, `person` e `notify`. Vamos executar o sistema utilizando o Docker Compose.
+Este tutorial irá guiá-lo através dos passos necessários para executar o projeto iChallenge em sua máquina local.
+O iChallenge é um sistema composto por dois microserviços: `person` e `notify`. Vamos executar o sistema utilizando o Docker Compose.
 
 ### Pré-requisitos
 
