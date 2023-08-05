@@ -23,12 +23,9 @@ public class NotifyCheckService {
             return approvalStatus;
         }
 
-
-        approvalStatus = true; //todo Aplicar lógica para determinar se vai ser aprovado ou não
-
+        approvalStatus = true; //todo Aplicar lógica para determinar se vai ser aprovado ou não || consumir o disapprove endpoint no "/notifyCheck/{personId}/disapprove"
 
         approvalStatusMap.put(personId, approvalStatus);
-
 
         notifyCheckHistoryRepository.save(
                 NotifyCheckHistory.builder()
@@ -38,8 +35,17 @@ public class NotifyCheckService {
                         .build()
         );
 
-
-
         return approvalStatus;
+    }
+
+    public void disapprovePerson(Long personId) {
+        approvalStatusMap.put(personId, false);
+        notifyCheckHistoryRepository.save(
+                NotifyCheckHistory.builder()
+                        .personId(personId)
+                        .isApproved(false)
+                        .createdAt(LocalDateTime.now())
+                        .build()
+        );
     }
 }
