@@ -59,6 +59,7 @@ Com as bases de dados criadas, você pode executar os microserviços `person` e 
 cd person
 mvn spring-boot:run
 ```
+***Atenção*** Agora você deve abrir um novo prompt de comando e navegar até a pasta *iChalenge* e colar o código abaixo
 
 **Microserviço Notify:**
 
@@ -67,7 +68,14 @@ cd notify
 mvn spring-boot:run
 ```
 
-### Passo 5: Testar o Sistema
+### Passo 5: Testar as APIs
+
+Certifique-se de ter o Postman instalado no seu computador.
+
+Acesse o link https://documenter.getpostman.com/view/15506429/2s9XxyRtNb
+
+Clique no botão laranja no canto superior direito ***Run in Postman***
+
 
 
 
