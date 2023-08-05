@@ -1,7 +1,4 @@
-# iChallenge
-👨‍💻
-
-Claro, aqui está o seu README formatado:
+# iChallenge 👨‍💻
 
 ## Tutorial para Executar o Projeto iChallenge
 
