@@ -1,0 +1,519 @@
+{
+	"info": {
+		"_postman_id": "60161b06-3339-4cb6-a511-13694c2cb781",
+		"name": "iChallenge",
+		"description": "Esta é a documentação da API desenvolvida para o desafio de nível Júnior - Backend. A API permite o cadastro de pessoas com dados pessoais e envio de notificação para aprovação.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15506429",
+		"_collection_link": "https://gold-star-310758.postman.co/workspace/New-Team-Workspace~fe961b59-362d-4f53-9a4d-06e2b8574e16/collection/15506429-60161b06-3339-4cb6-a511-13694c2cb781?action=share&creator=15506429&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "MS-Person",
+			"item": [
+				{
+					"name": "Get All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check if idade is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('array');",
+									"",
+									"  responseData.forEach(function (item) {",
+									"    pm.expect(item.idade).to.be.a('number').and.to.be.at.least(0);",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pessoas/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pessoas",
+								"all"
+							]
+						},
+						"description": "``` json\n[\n  {\n    \"id\": 1,\n    \"nome\": \"João\",\n    \"sobreNome\": \"Silva\",\n    \"idade\": 30,\n    \"pais\": \"Brasil\"\n  },\n  {\n    \"id\": 2,\n    \"nome\": \"Maria\",\n    \"sobreNome\": \"Santos\",\n    \"idade\": 25,\n    \"pais\": \"EUA\"\n  }\n]\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Idade is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.idade).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.idade).to.be.at.least(0, \"Idade should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Nome and Sobrenome are non-empty strings\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.nome).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Nome should not be empty\");",
+									"    pm.expect(responseData.sobreNome).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Sobrenome should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Pais is a valid country name\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.pais).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.pais).to.match(/^[A-Za-z\\s]+$/);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\" : \"Alrac\",\n\n    \"sobreNome\" : \"Zeugirdor\",\n\n    \"idade\" : 24,\n\n    \"pais\" : \"Estonia\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pessoas/cadastrar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pessoas",
+								"cadastrar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pessoas/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pessoas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code is 200', function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"})",
+									"",
+									"pm.test('Response has the required fields', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.exist;",
+									"    pm.expect(responseData.nome).to.exist;",
+									"    pm.expect(responseData.sobreNome).to.exist;",
+									"    pm.expect(responseData.idade).to.exist;",
+									"    pm.expect(responseData.pais).to.exist;",
+									"})",
+									"",
+									"pm.test('Id is a non-negative integer', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.id).to.be.at.least(0);",
+									"})",
+									"",
+									"pm.test('Nome is a non-empty string', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.nome).to.be.a('string').and.to.have.lengthOf.at.least(1, 'Nome should not be empty');",
+									"})",
+									"",
+									"pm.test('sobreNome should not be changed', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.sobreNome).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, 'SobreNome should not be empty');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Carla\",\n \"sobreNome\": \"Rodriguez\",\n    \"idade\": 52\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/pessoas/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pessoas",
+								"2"
+							]
+						},
+						"description": "Para questões didáticas, está proibida a mudança do \"sobreNome\", assim vemos na prática como funciona o DTO."
+					},
+					"response": []
+				},
+				{
+					"name": "Get By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.exist;",
+									"    pm.expect(responseData.nome).to.exist;",
+									"    pm.expect(responseData.sobreNome).to.exist;",
+									"    pm.expect(responseData.idade).to.exist;",
+									"    pm.expect(responseData.pais).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Id is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.exist.and.to.be.a('number').and.to.satisfy((id) => id >= 0, \"Id should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Nome and sobreNome are non-empty strings\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.nome).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Nome should not be empty\");",
+									"  pm.expect(responseData.sobreNome).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"SobreNome should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Idade is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.idade).to.be.a('number');",
+									"  pm.expect(responseData.idade).to.be.at.least(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/pessoas/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"pessoas",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "## Descrição\n\nEsta API permite gerenciar informações de pessoas, enviando notificações para aprovação a cada requisição POST | PATCH | DELETE ."
+		},
+		{
+			"name": "MS-Notify",
+			"item": [
+				{
+					"name": "Check ifApproved By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required field - isApproved\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.isApproved).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"isApproved is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.isApproved).to.be.a('boolean');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the value of isApproved is true\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.isApproved).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/notifyCheck/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"notifyCheck",
+								"2"
+							]
+						},
+						"description": "## Recursos\n\nRetorna uma lista de todos os filmes cadastrados na API."
+					},
+					"response": []
+				},
+				{
+					"name": "Check History",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('Validate the response body', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function (item) {",
+									"        pm.expect(item).to.be.an('object');",
+									"        pm.expect(item.id).to.be.a('number');",
+									"        pm.expect(item.createdAt).to.be.a('string');",
+									"        pm.expect(item.personId).to.be.a('number');",
+									"        pm.expect(item.isApproved).to.be.a('boolean');",
+									"    });",
+									"})",
+									"",
+									"pm.test('createdAt is in a valid date format', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function (item) {",
+									"        pm.expect(item.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}$/);",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test('personId is a non-negative integer', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function (item) {",
+									"        pm.expect(item.personId).to.be.a('number').and.to.be.at.least(0);",
+									"    });",
+									"})",
+									"",
+									"pm.test('isApproved is a boolean value', function () {",
+									"    const responseData = pm.response.json();",
+									"    responseData.forEach(function (item) {",
+									"        pm.expect(item.isApproved).to.be.a('boolean');",
+									"    });",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/notifyCheck/history",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"notifyCheck",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check History By ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Response status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"})",
+									"",
+									"pm.test('The id field is a non-negative integer', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.id).to.be.at.least(0);",
+									"})",
+									"",
+									"pm.test('createdAt is in a valid date format', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.createdAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{6}$/);",
+									"});",
+									"",
+									"pm.test('personId is a non-negative integer', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.personId).to.be.a('number').and.to.be.at.least(0);",
+									"})",
+									"",
+									"pm.test('isApproved field is a boolean value', function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.isApproved).to.be.a('boolean');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/notifyCheck/history/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"notifyCheck",
+								"history",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Esta API permite gerenciar as notificações das requisições POST | PATCH | DELETE do MS-Person, enviando notificações para aprovação a cada requisição."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
